@@ -314,7 +314,7 @@ const App = () => {
     <>
       <Navbar bg="dark" variant="dark">
         <Container>
-          <Navbar.Brand style={{ margin:'auto' }} onClick={() => window.open('https://deezy.io')}>
+          <Navbar.Brand style={{ margin:'auto' }} onClick={() => window.open('https://deezy.io', '_self')}>
             <img
               alt=""
               src={DeezyLogo}
