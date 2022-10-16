@@ -6,6 +6,7 @@ import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import Card from 'react-bootstrap/Card';
 import Nav from 'react-bootstrap/Nav';
+import Navbar from 'react-bootstrap/Navbar';
 import Modal from 'react-bootstrap/Modal';
 import { FaRegCopy } from 'react-icons/fa';
 import InputGroup from 'react-bootstrap/InputGroup';
@@ -16,6 +17,7 @@ import useInterval from 'react-useinterval';
 import Image from 'react-bootstrap/Image';
 import { validate, Network } from 'bitcoin-address-validation';
 import GreenCheck from './assets/images/green-check.gif';
+import DeezyLogo from './assets/images/DeezyLogoVert.svg';
 
 // const { parsePaymentRequest } = require('invoices')
 const axios = require('axios').default;
@@ -309,173 +311,188 @@ const App = () => {
   }
 
   return (
-    <Container fluid className="d-flex flex-column text-center align-items-center justify-content-center mt-5">
-      <Container fluid>
-        <br />
-        <Card id="swap-section" className="section" fluid>
-          <Card.Header className="card-header py-4">
-            <Card.Title>
-              <b>swap instantly</b> to get <b>inbound liquidity</b>
-            </Card.Title>
-          </Card.Header>
-          {ready ?
-            <>
-              <Card.Body className="d-flex flex-column justify-content-center">
-                <InputGroup hasValidation className="input-group mb-3 w-100 swap-option">
-                  <InputGroup.Text className="w-25 in-text">send</InputGroup.Text>
-                  <Form.Control type="number" className="in-text" step={swapParams.useSatsForSwapDisplay ? 1000000 : 0.01} onChange={handleLightningSwapAmountChange} value={swapParams.lightningSwapAmountDisplay} required isInvalid={!isValidSwapParams()} />
-                  <InputGroup.Text className="input-group-text hover in-text" onClick={toggleSats}>⚡ {satsOrBtcLabel()}</InputGroup.Text>
-                </InputGroup>
-                <InputGroup hasValidation className="input-group mb-3 w-100 swap-option">
-                  <InputGroup.Text className="w-25 in-text">receive</InputGroup.Text>
-                  <Form.Control type="number" className="in-text" step={swapParams.useSatsForSwapDisplay ? 1000000 : 0.01} onChange={handleChainSwapAmountChange} value={swapParams.chainSwapAmountDisplay} required isInvalid={!isValidSwapParams()} />
-                  <InputGroup.Text className="input-group-text hover in-text" onClick={toggleSats}>⛓️ {satsOrBtcLabel()}</InputGroup.Text>
-                  <Form.Control.Feedback type="invalid">
-                    {
-                      swapParams.chainSwapAmountSats < swapInfo.min_swap_amount_sats ?
-                        `min swap is ${swapParams.useSatsForSwapDisplay ? swapInfo.min_swap_amount_sats : swapInfo.min_swap_amount_sats * 1.0 / SATS_PER_BTC} ${satsOrBtcLabel()}`
-                        :
-                        `max swap is ${swapParams.useSatsForSwapDisplay ? swapInfo.max_swap_amount_sats : swapInfo.max_swap_amount_sats * 1.0 / SATS_PER_BTC} ${satsOrBtcLabel()}`
-                    }
-                  </Form.Control.Feedback>
-                </InputGroup>
-                <Form.Label className="swap-option"><div className="small-text" id="fee-info">{swapParams.feeOnChainSatsPerVbyte} sat/vbyte on-chain fee rate</div></Form.Label>
-                <Form.Range className="swap-option" min="1" defaultValue={DEFAULT_ON_CHAIN_FEE_RATE_SATS_PER_VBYTE} onChange={handleFeeRateChange} />
-                <Form.Label className="swap-option"><div className="small-text" id="fee-info">{swapParams.totalFeeSats.toLocaleString()} total sat fee ({Math.round(swapParams.feeNetPpm).toLocaleString()} ppm)</div></Form.Label>
+    <>
+      <Navbar bg="dark" variant="dark">
+        <Container>
+          <Navbar.Brand style={{ margin:'auto' }}href="#home" onClick={() => window.open('https://deezy.io')}>
+            <img
+              alt=""
+              src={DeezyLogo}
+              height="100"
+              className="align-top my-2"
+            />{' '}
+          </Navbar.Brand>
+        </Container>
+      </Navbar>
+      <Container fluid className="main-container d-flex flex-column text-center align-items-center justify-content-center pt-5">
+        <Container fluid>
+          <br />
+          <Card id="swap-section" className="section" fluid bg="dark" text="white" variant="dark">
+            <Card.Header style={{ borderBottom: '1px solid gray', marginBottom: '20px' }} className="card-header py-4">
+              <Card.Title>
+                <b>swap instantly</b> to get <b>inbound liquidity</b>
+              </Card.Title>
+            </Card.Header>
+            {ready ?
+              <>
+                <Card.Body className="d-flex flex-column justify-content-center">
+                  <InputGroup hasValidation className="input-group mb-3 w-100 swap-option">
+                    <InputGroup.Text className="w-25 in-text">send</InputGroup.Text>
+                    <Form.Control type="number" className="in-text" step={swapParams.useSatsForSwapDisplay ? 1000000 : 0.01} onChange={handleLightningSwapAmountChange} value={swapParams.lightningSwapAmountDisplay} required isInvalid={!isValidSwapParams()} />
+                    <InputGroup.Text className="input-group-text hover in-text" onClick={toggleSats}>⚡ {satsOrBtcLabel()}</InputGroup.Text>
+                  </InputGroup>
+                  <InputGroup hasValidation className="input-group mb-3 w-100 swap-option">
+                    <InputGroup.Text className="w-25 in-text">receive</InputGroup.Text>
+                    <Form.Control type="number" className="in-text" step={swapParams.useSatsForSwapDisplay ? 1000000 : 0.01} onChange={handleChainSwapAmountChange} value={swapParams.chainSwapAmountDisplay} required isInvalid={!isValidSwapParams()} />
+                    <InputGroup.Text className="input-group-text hover in-text" onClick={toggleSats}>⛓️ {satsOrBtcLabel()}</InputGroup.Text>
+                    <Form.Control.Feedback type="invalid">
+                      {
+                        swapParams.chainSwapAmountSats < swapInfo.min_swap_amount_sats ?
+                          `min swap is ${swapParams.useSatsForSwapDisplay ? swapInfo.min_swap_amount_sats : swapInfo.min_swap_amount_sats * 1.0 / SATS_PER_BTC} ${satsOrBtcLabel()}`
+                          :
+                          `max swap is ${swapParams.useSatsForSwapDisplay ? swapInfo.max_swap_amount_sats : swapInfo.max_swap_amount_sats * 1.0 / SATS_PER_BTC} ${satsOrBtcLabel()}`
+                      }
+                    </Form.Control.Feedback>
+                  </InputGroup>
+                  <Form.Label className="swap-option"><div className="small-text" id="fee-info">{swapParams.feeOnChainSatsPerVbyte} sat/vbyte on-chain fee rate</div></Form.Label>
+                  <Form.Range className="swap-option" min="1" defaultValue={DEFAULT_ON_CHAIN_FEE_RATE_SATS_PER_VBYTE} onChange={handleFeeRateChange} />
+                  <Form.Label className="swap-option"><div className="small-text" id="fee-info">{swapParams.totalFeeSats.toLocaleString()} total sat fee ({Math.round(swapParams.feeNetPpm).toLocaleString()} ppm)</div></Form.Label>
+                  <br />
+
+                  <Button className="w-50 centered" disabled={!isValidSwapParams()} onClick={initiateSwap}>swap</Button>
+                </Card.Body>
                 <br />
+                <Card.Footer className="py-4" style={{borderTop:'1px solid gray'}}>
+                  <Card.Title>
+                    <b>view</b> the <b><a style={{color:'white'}} href="https://docs.deezy.io/" target="_blank">api docs</a></b>
+                  </Card.Title>
+                </Card.Footer>
+              </>
+              :
+              <>
+                <br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
+              </>
+            }
+          </Card>
+          <br />
+          <br />
+          <Card id="node-section" className="section" bg="dark" text="white">
+            <Card.Header style={{borderBottom:'1px solid gray'}}>
+              <Card.Title className="py-3">
+                <b>open a channel</b> with <b>deezy</b>:
+              </Card.Title>
+              <Nav variant="pills" defaultActiveKey={nodeLinkType} onSelect={(s) => setNodeLinkType(s)}>
+                <Nav.Item>
+                  <Nav.Link eventKey="#clearnet">Clearnet</Nav.Link>
+                </Nav.Item>
+                <Nav.Item>
+                  <Nav.Link eventKey="#tor">Tor</Nav.Link>
+                </Nav.Item>
+              </Nav>
+            </Card.Header>
+            <Card.Body>
+              <Card.Text className="node-text">
+                {getNodeUri()}
+                <br />
+                <br />
+                <Button ref={copyNodeTarget} onClick={copyNodeInfo} variant="outline-primary"><FaRegCopy /> copy</Button>
+              </Card.Text>
+            </Card.Body>
+          </Card>
+          <br />
+          <br />
+          <br />
+          <Modal show={showProvideAddressModal} onHide={() => setShowProvideAddressModal(false)} className="modal py-5">
+            <Modal.Header closeButton className="modal-header p-4" >
+              <Modal.Title>enter receive address</Modal.Title>
+            </Modal.Header>
+            <Modal.Body className="modal-body p-4">
+              <div>provide a fresh btc address to receive the on-chain funds</div><br />
+              <InputGroup className="mb-3">
+                <Form.Control onChange={handleBtcAddressChange}
+                  placeholder="paste btc address here"
+                  aria-label="paste btc address heres"
+                  aria-describedby="basic-addon2"
+                  isInvalid={!isBtcInputAddressValid}
+                  autoFocus
+                />
+                <Form.Control.Feedback type="invalid">
+                  <br />that is not a valid {TESTNET ? 'testnet' : 'mainnet'} btc address
+                </Form.Control.Feedback>
+              </InputGroup>
+            </Modal.Body>
+          </Modal>
 
-                <Button className="w-50 centered" disabled={!isValidSwapParams()} onClick={initiateSwap}>swap</Button>
-              </Card.Body>
+          <Modal show={showConfirmSwapModal} onHide={() => setShowConfirmSwapModal(false)} className="py-5">
+            <Modal.Header closeButton className="p-4">
+              <Modal.Title>confirm details?</Modal.Title>
+            </Modal.Header>
+            <Modal.Body className="px-5 py-3">
+              {swapSummary()}
+            </Modal.Body>
+            <Modal.Footer>
+              <Button variant="secondary" onClick={() => setShowConfirmSwapModal(false)}>
+                cancel
+              </Button>
+              <Button variant="primary" onClick={handleConfirmSwap}>
+                confirm
+              </Button>
+            </Modal.Footer>
+          </Modal>
+          <Modal show={showAwaitingInvoiceModal} onHide={() => setShowAwaitingInvoiceModal(false)} className="py-5">
+            <Modal.Header closeButton className="p-4">
+              <Modal.Title>preparing swap...</Modal.Title>
+            </Modal.Header>
+            <Modal.Body className="px-5 py-3 center-contents">
+              <br /><br />
+              <TailSpin stroke="#000000" speed={.75} />
+              <br /><br /><br />
+            </Modal.Body>
+          </Modal>
+          <Modal show={showPayModal} onHide={() => setShowPayModal(false)} className="py-5">
+            <Modal.Header closeButton className="p-4">
+              <Modal.Title>pay invoice to complete swap</Modal.Title>
+            </Modal.Header>
+            <Modal.Body className="px-5 py-3 center-contents modal-body">
+              <QRCodeSVG size="240" value={`lightning:${invoiceToPay}`} />
+              <br /><br />
+              <Countdown date={new Date(invoiceDetails.expiresAt)} renderer={countdownRenderer} />
+              <br /><br />
+              <Button onClick={copyInvoiceToPay} variant="outline-primary"><FaRegCopy /> copy</Button>
+              <br /><br />
+              <span className="small-text">{invoiceToPay}</span>
+            </Modal.Body>
+          </Modal>
+          <Modal show={showSwapCompleteModal} onHide={() => setShowSwapCompleteModal(false)} className="py-5">
+            <Modal.Header closeButton className="p-4">
+              <Modal.Title>swap complete</Modal.Title>
+            </Modal.Header>
+            <Modal.Body className="px-5 py-3 center-contents modal-body">
+              <div>
+                <Image id="check-image" src={GreenCheck} alt="green check" />
+              </div>
               <br />
-              <Card.Footer className="py-4">
-                <Card.Title>
-                  <b>view</b> the <b><a href="https://docs.deezy.io/" target="_blank">api docs</a></b>
-                </Card.Title>
-              </Card.Footer>
-            </>
-            :
-            <>
-              <br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
-            </>
-          }
-        </Card>
+              txid: <a className="small-text" target="_blank" href={`https://mempool.space/${TESTNET ? 'testnet/' : ''}tx/${paidOnChainTxid}`}>{paidOnChainTxid}</a>
+            </Modal.Body>
+            <Modal.Footer>
+              <Button variant="primary" onClick={() => setShowSwapCompleteModal(false)}>
+                done
+              </Button>
+            </Modal.Footer>
+          </Modal>
+          <Modal show={showErrorModal} onHide={() => setShowErrorModal(false)} className="py-5">
+            <Modal.Header closeButton className="p-4">
+              <Modal.Title>error</Modal.Title>
+            </Modal.Header>
+            <Modal.Body className="px-5 py-3 center-contents">
+              oops something went wrong
+            </Modal.Body>
+          </Modal>
+        </Container>
         <br />
-        <br />
-        <Card id="node-section" className="section">
-          <Card.Header>
-            <Card.Title className="py-3">
-              <b>open a channel</b> with <b>deezy</b>:
-            </Card.Title>
-            <Nav variant="tabs" defaultActiveKey={nodeLinkType} onSelect={(s) => setNodeLinkType(s)}>
-              <Nav.Item>
-                <Nav.Link eventKey="#clearnet">Clearnet</Nav.Link>
-              </Nav.Item>
-              <Nav.Item>
-                <Nav.Link eventKey="#tor">Tor</Nav.Link>
-              </Nav.Item>
-            </Nav>
-          </Card.Header>
-          <Card.Body>
-            <Card.Text className="node-text">
-              {getNodeUri()}
-              <br />
-              <br />
-              <Button ref={copyNodeTarget} onClick={copyNodeInfo} variant="outline-primary"><FaRegCopy /> copy</Button>
-            </Card.Text>
-          </Card.Body>
-        </Card>
-        <br />
-        <br />
-        <br />
-        <Modal show={showProvideAddressModal} onHide={() => setShowProvideAddressModal(false)} className="py-5">
-          <Modal.Header closeButton className="p-4">
-            <Modal.Title>enter receive address</Modal.Title>
-          </Modal.Header>
-          <Modal.Body className="p-4">
-            <div>provide a fresh btc address to receive the on-chain funds</div><br />
-            <InputGroup className="mb-3">
-              <Form.Control onChange={handleBtcAddressChange}
-                placeholder="paste btc address here"
-                aria-label="paste btc address heres"
-                aria-describedby="basic-addon2"
-                isInvalid={!isBtcInputAddressValid}
-              />
-              <Form.Control.Feedback type="invalid">
-                <br />that is not a valid {TESTNET ? 'testnet' : 'mainnet'} btc address
-              </Form.Control.Feedback>
-            </InputGroup>
-          </Modal.Body>
-        </Modal>
-
-        <Modal show={showConfirmSwapModal} onHide={() => setShowConfirmSwapModal(false)} className="py-5">
-          <Modal.Header closeButton className="p-4">
-            <Modal.Title>confirm details?</Modal.Title>
-          </Modal.Header>
-          <Modal.Body className="px-5 py-3">
-            {swapSummary()}
-          </Modal.Body>
-          <Modal.Footer>
-            <Button variant="secondary" onClick={() => setShowConfirmSwapModal(false)}>
-              cancel
-            </Button>
-            <Button variant="primary" onClick={handleConfirmSwap}>
-              confirm
-            </Button>
-          </Modal.Footer>
-        </Modal>
-        <Modal show={showAwaitingInvoiceModal} onHide={() => setShowAwaitingInvoiceModal(false)} className="py-5">
-          <Modal.Header closeButton className="p-4">
-            <Modal.Title>preparing swap...</Modal.Title>
-          </Modal.Header>
-          <Modal.Body className="px-5 py-3 center-contents">
-            <br /><br />
-            <TailSpin stroke="#000000" speed={.75} />
-            <br /><br /><br />
-          </Modal.Body>
-        </Modal>
-        <Modal show={showPayModal} onHide={() => setShowPayModal(false)} className="py-5">
-          <Modal.Header closeButton className="p-4">
-            <Modal.Title>pay invoice to complete swap</Modal.Title>
-          </Modal.Header>
-          <Modal.Body className="px-5 py-3 center-contents modal-body">
-            <QRCodeSVG size="240" value={`lightning:${invoiceToPay}`} />
-            <br /><br />
-            <Countdown date={new Date(invoiceDetails.expiresAt)} renderer={countdownRenderer} />
-            <br /><br />
-            <Button onClick={copyInvoiceToPay} variant="outline-primary"><FaRegCopy /> copy</Button>
-            <br /><br />
-            <span className="small-text">{invoiceToPay}</span>
-          </Modal.Body>
-        </Modal>
-        <Modal show={showSwapCompleteModal} onHide={() => setShowSwapCompleteModal(false)} className="py-5">
-          <Modal.Header closeButton className="p-4">
-            <Modal.Title>swap complete</Modal.Title>
-          </Modal.Header>
-          <Modal.Body className="px-5 py-3 center-contents modal-body">
-            <div>
-              <Image id="check-image" src={GreenCheck} alt="green check" />
-            </div>
-            <br />
-            txid: <a className="small-text" target="_blank" href={`https://mempool.space/${TESTNET ? 'testnet/' : ''}tx/${paidOnChainTxid}`}>{paidOnChainTxid}</a>
-          </Modal.Body>
-          <Modal.Footer>
-            <Button variant="primary" onClick={() => setShowSwapCompleteModal(false)}>
-              done
-            </Button>
-          </Modal.Footer>
-        </Modal>
-        <Modal show={showErrorModal} onHide={() => setShowErrorModal(false)} className="py-5">
-          <Modal.Header closeButton className="p-4">
-            <Modal.Title>error</Modal.Title>
-          </Modal.Header>
-          <Modal.Body className="px-5 py-3 center-contents">
-            oops something went wrong
-          </Modal.Body>
-        </Modal>
+        <br /><br /><br />
       </Container>
-      <br />
-      <br /><br /><br />
-    </Container>
+    </>
   )
 }
 

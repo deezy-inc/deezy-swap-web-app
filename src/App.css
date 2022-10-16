@@ -1,15 +1,15 @@
 :root {
   --lightblue: rgb(230, 242, 247);
   --lightbluegray: rgb(239, 245, 247);
-  --orange: rgba(240, 159, 18, 1);
+  --orange: #ff8a00;
+  --blackish: rgb(35, 34, 34);
 }
 
 html,
 body,
 #root,
 .vh100 {
-  background: rgb(240, 159, 18);
-  background: linear-gradient(0deg, var(--orange) 0%, rgba(0, 212, 255, 1) 100%);
+  background: var(--blackish);
   overflow-y: scroll;
 }
 
@@ -47,6 +47,10 @@ h1 {
   font-size: 10pt;
 }
 
+.main-container {
+  border-top: 1px solid grey;
+}
+
 #node-section,
 #contact-section,
 #swap-section {
@@ -55,6 +59,8 @@ h1 {
   border: 2px solid black;
   border-radius: 10px;
   color: black;
+  box-shadow: #ff8a00 0px 0px 50px;
+  margin-bottom: 100px;
 }
 
 #chainval {
@@ -81,6 +87,7 @@ h1 {
 .hover:hover {
   cursor: pointer;
 }
+
 
 .modal-body {
   overflow-wrap: break-word;
