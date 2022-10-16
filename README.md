@@ -1,3 +1,1 @@
-# deezy website
-
-landing page for deezy node
+# deezy swap web app
