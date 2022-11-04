@@ -180,7 +180,7 @@ const App = () => {
   function handleFeeRateChange(evt) {
     const newFeeOnChainSatsPerByte = evt.target.value
     const newLightningSwapAmountSats = swapParams.lightningSwapAmountSats
-    const newChainSwapAmountSats = getChainAmountFromLightningAmount(newLightningSwapAmountSats, swapParams.feeOnChainSatsPerVbyte)
+    const newChainSwapAmountSats = getChainAmountFromLightningAmount(newLightningSwapAmountSats, newFeeOnChainSatsPerByte)
     const newTotalFeeSats = newLightningSwapAmountSats - newChainSwapAmountSats
     const newUseSatsForSwapDisplay = swapParams.useSatsForSwapDisplay
     updateSwapParams({ newLightningSwapAmountSats, newFeeOnChainSatsPerByte, newTotalFeeSats, newChainSwapAmountSats, newUseSatsForSwapDisplay })
