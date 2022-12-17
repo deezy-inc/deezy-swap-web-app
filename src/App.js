@@ -43,11 +43,16 @@ const TOR_NODE_URI = `${NODE_ID}@ecu3omnk6kxer5hw35owlzhw3xuqfroxjnnflbkjkc7xy2j
 // Temporary API token, will be disabled soon. If you use this is a script, you're gonna have a bad time!
 const FREE_DEEZY_API_TOKEN = TESTNET ? 'a8ff79a59e4030a264fbf044487c2431' : '67f362d935664117acbc9eb4ca4486da'
 
+function checkIsAccessTokenValid(token) {
+  return token && token.match(/[0-9A-Fa-f]{32}/g)
+}
+
 const App = () => {
   const [copiedVisible, setCopiedVisible] = useState(false)
   const [nodeLinkType, setNodeLinkType] = useState("#clearnet")
   const [showPayModal, setShowPayModal] = useState(false)
   const [showProvideAddressModal, setShowProvideAddressModal] = useState(false)
+  const [showEnterAccessTokenModal, setShowEnterAccessTokenModal] = useState(false)
   const [showConfirmSwapModal, setShowConfirmSwapModal] = useState(false)
   const [showAwaitingInvoiceModal, setShowAwaitingInvoiceModal] = useState(false)
   const [showSwapCompleteModal, setShowSwapCompleteModal] = useState(false)
@@ -66,6 +71,9 @@ const App = () => {
   const [invoiceDetails, setInvoiceDetails] = useState({})
   const [paidOnChainTxid, setPaidOnChainTxid] = useState(null)
   const [isBtcInputAddressValid, setIsBtcInputAddressValid] = useState(true)
+  const savedAccessToken = localStorage.getItem('access-token')
+  const [isAccessTokenValid, setIsAccessTokenValid] = useState(checkIsAccessTokenValid(savedAccessToken))
+  const [accessToken, setAccessToken] = useState(savedAccessToken)
 
   const [ready, setReady] = useState(false)
 
@@ -250,7 +258,18 @@ const App = () => {
     }
     setDestinationBtcAddress(newaddr)
     setShowProvideAddressModal(false)
-    setShowConfirmSwapModal(true)
+    setShowEnterAccessTokenModal(true)
+  }
+
+  function handleAccessTokenChange(evt) {
+    const newtoken = evt.target.value
+    // validate newtoken is 32 digit hex
+    if (!checkIsAccessTokenValid(newtoken)) {
+      setIsAccessTokenValid(false)
+      return
+    }
+    setIsAccessTokenValid(true)
+    setAccessToken(newtoken)
   }
 
   async function handleConfirmSwap() {
@@ -265,7 +284,7 @@ const App = () => {
           on_chain_sats_per_vbyte: parseInt(swapParams.feeOnChainSatsPerVbyte)
         }, {
         headers: {
-          'x-api-token': FREE_DEEZY_API_TOKEN,
+          'x-api-token': accessToken || FREE_DEEZY_API_TOKEN,
         }
       })
     } catch (err) {
@@ -289,6 +308,18 @@ const App = () => {
     // TODO: pay modal needs to poll until invoice is paid
     // TODO: pay modal should show invoice expiration countdown
     // TODO: pay modal should show QR code for invoice
+  }
+
+  function handleSkipAccessToken() {
+    setAccessToken(null)
+    localStorage.setItem('access-token', null)
+    handleConfirmAccessToken()
+  }
+
+  function handleConfirmAccessToken() {
+    localStorage.setItem('access-token', accessToken)
+    setShowEnterAccessTokenModal(false)
+    setShowConfirmSwapModal(true)
   }
 
   function swapSummary() {
@@ -428,7 +459,37 @@ const App = () => {
               </InputGroup>
             </Modal.Body>
           </Modal>
-
+          <Modal show={showEnterAccessTokenModal} onHide={() => setShowEnterAccessTokenModal(false)} className="py-5">
+            <Modal.Header closeButton className="p-4">
+              <Modal.Title>enter access token</Modal.Title>
+            </Modal.Header>
+            <Modal.Body className="modal-body p-4">
+              <div>an access token will be required to perform deezy swaps</div><br />
+              <InputGroup className="mb-3">
+                <Form.Control onChange={handleAccessTokenChange}
+                  placeholder="paste access token here"
+                  defaultValue={accessToken}
+                  aria-label="paste access token here"
+                  aria-describedby="basic-addon2"
+                  isInvalid={!isAccessTokenValid}
+                  autoFocus
+                />
+              </InputGroup>
+              <div className="small-text">get a token by emailing support@deezy.io or contacting @dannydeezy on telegram. access tokens will be required starting in early january 2023. until then you can skip this step.</div><br />
+              <div className="small-text"></div>
+            </Modal.Body>
+            <Modal.Footer>
+              <Button variant="secondary" onClick={() => setShowEnterAccessTokenModal(false)}>
+                cancel
+              </Button>
+              <Button variant="secondary" onClick={handleSkipAccessToken}>
+                skip
+              </Button>
+              <Button variant="primary" onClick={handleConfirmAccessToken} disabled={!isAccessTokenValid}>
+                confirm
+              </Button>
+            </Modal.Footer>
+          </Modal>
           <Modal show={showConfirmSwapModal} onHide={() => setShowConfirmSwapModal(false)} className="py-5">
             <Modal.Header closeButton className="p-4">
               <Modal.Title>confirm details?</Modal.Title>
