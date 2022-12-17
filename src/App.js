@@ -40,6 +40,8 @@ const INVOICE_EXPIRY_MS = 1000 * 60 * 60 * 12 // 12 hr
 const NODE_ID = "024bfaf0cabe7f874fd33ebf7c6f4e5385971fc504ef3f492432e9e3ec77e1b5cf"
 const CLEARNET_NODE_URI = `${NODE_ID}@52.1.72.207:9735`
 const TOR_NODE_URI = `${NODE_ID}@ecu3omnk6kxer5hw35owlzhw3xuqfroxjnnflbkjkc7xy2jy3gy7b2yd.onion:9735`
+// Temporary API token, will be disabled soon. If you use this is a script, you're gonna have a bad time!
+const FREE_DEEZY_API_TOKEN = TESTNET ? 'a8ff79a59e4030a264fbf044487c2431' : '67f362d935664117acbc9eb4ca4486da'
 
 const App = () => {
   const [copiedVisible, setCopiedVisible] = useState(false)
@@ -261,7 +263,11 @@ const App = () => {
           amount_sats: parseInt(swapParams.chainSwapAmountSats),
           on_chain_address: destinationBtcAddress,
           on_chain_sats_per_vbyte: parseInt(swapParams.feeOnChainSatsPerVbyte)
-        })
+        }, {
+        headers: {
+          'x-api-token': FREE_DEEZY_API_TOKEN,
+        }
+      })
     } catch (err) {
       setShowAwaitingInvoiceModal(false)
       setShowErrorModal(true)
@@ -314,7 +320,7 @@ const App = () => {
     <>
       <Navbar bg="dark" variant="dark">
         <Container>
-          <Navbar.Brand style={{ margin:'auto' }} onClick={() => window.open('https://deezy.io', '_self')}>
+          <Navbar.Brand style={{ margin: 'auto' }} onClick={() => window.open('https://deezy.io', '_self')}>
             <img
               alt=""
               src={DeezyLogo}
@@ -362,9 +368,9 @@ const App = () => {
                   <Button className="w-50 centered" disabled={!isValidSwapParams()} onClick={initiateSwap}>swap</Button>
                 </Card.Body>
                 <br />
-                <Card.Footer className="py-4" style={{borderTop:'1px solid gray'}}>
+                <Card.Footer className="py-4" style={{ borderTop: '1px solid gray' }}>
                   <Card.Title>
-                    <b>view</b> the <b><a style={{color:'white'}} href="https://docs.deezy.io/" target="_blank">api docs</a></b>
+                    <b>view</b> the <b><a style={{ color: 'white' }} href="https://docs.deezy.io/" target="_blank">api docs</a></b>
                   </Card.Title>
                 </Card.Footer>
               </>
@@ -377,7 +383,7 @@ const App = () => {
           <br />
           <br />
           <Card id="node-section" className="section" bg="dark" text="white">
-            <Card.Header style={{borderBottom:'1px solid gray'}}>
+            <Card.Header style={{ borderBottom: '1px solid gray' }}>
               <Card.Title className="py-3">
                 <b>open a channel</b> with <b>deezy</b>:
               </Card.Title>
