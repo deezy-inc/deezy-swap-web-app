@@ -40,8 +40,6 @@ const INVOICE_EXPIRY_MS = 1000 * 60 * 60 * 12 // 12 hr
 const NODE_ID = "024bfaf0cabe7f874fd33ebf7c6f4e5385971fc504ef3f492432e9e3ec77e1b5cf"
 const CLEARNET_NODE_URI = `${NODE_ID}@52.1.72.207:9735`
 const TOR_NODE_URI = `${NODE_ID}@ecu3omnk6kxer5hw35owlzhw3xuqfroxjnnflbkjkc7xy2jy3gy7b2yd.onion:9735`
-// Temporary API token, will be disabled soon. If you use this is a script, you're gonna have a bad time!
-const FREE_DEEZY_API_TOKEN = TESTNET ? 'a8ff79a59e4030a264fbf044487c2431' : '67f362d935664117acbc9eb4ca4486da'
 
 function checkIsAccessTokenValid(token) {
   return token && token.match(/[0-9A-Fa-f]{32}/g)
@@ -284,7 +282,7 @@ const App = () => {
           on_chain_sats_per_vbyte: parseInt(swapParams.feeOnChainSatsPerVbyte)
         }, {
         headers: {
-          'x-api-token': accessToken || FREE_DEEZY_API_TOKEN,
+          'x-api-token': accessToken,
         }
       })
     } catch (err) {
@@ -310,12 +308,6 @@ const App = () => {
     // TODO: pay modal should show QR code for invoice
   }
 
-  function handleSkipAccessToken() {
-    setAccessToken(null)
-    localStorage.setItem('access-token', null)
-    handleConfirmAccessToken()
-  }
-
   function handleConfirmAccessToken() {
     localStorage.setItem('access-token', accessToken)
     setShowEnterAccessTokenModal(false)
@@ -339,7 +331,7 @@ const App = () => {
       return <span>the invoice has expired</span>;
     } else {
       // Render a countdown
-      return <span>expires in: {minutes > 0 ? `${minutes}m` : ''} {seconds}s</span>;
+      return <span>expires in: {hours > 0 ? `${hours}h` : ''} {minutes > 0 ? `${minutes}m` : ''} {seconds}s</span>;
     }
   };
 
@@ -475,15 +467,12 @@ const App = () => {
                   autoFocus
                 />
               </InputGroup>
-              <div className="small-text">get a token by emailing support@deezy.io or contacting @dannydeezy on telegram. access tokens will be required starting in early january 2023. until then you can skip this step.</div><br />
+              <div className="small-text">get a token by emailing support@deezy.io or contacting @dannydeezy on telegram.</div><br />
               <div className="small-text"></div>
             </Modal.Body>
             <Modal.Footer>
               <Button variant="secondary" onClick={() => setShowEnterAccessTokenModal(false)}>
                 cancel
-              </Button>
-              <Button variant="secondary" onClick={handleSkipAccessToken}>
-                skip
               </Button>
               <Button variant="primary" onClick={handleConfirmAccessToken} disabled={!isAccessTokenValid}>
                 confirm
