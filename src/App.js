@@ -17,7 +17,7 @@ import useInterval from 'react-useinterval';
 import Image from 'react-bootstrap/Image';
 import { validate, Network } from 'bitcoin-address-validation';
 import GreenCheck from './assets/images/green-check.gif';
-import DeezyLogo from './assets/images/DeezyLogoVert.svg';
+import DeezyLogo from './assets/images/Logo-No-Text.svg';
 
 // const { parsePaymentRequest } = require('invoices')
 const axios = require('axios').default;
@@ -393,7 +393,7 @@ const App = () => {
                 <br />
                 <Card.Footer className="py-4" style={{ borderTop: '1px solid gray' }}>
                   <Card.Title>
-                    <b>view</b> the <b><a style={{ color: 'white' }} href="https://docs.deezy.io/" target="_blank">api docs</a></b>
+                    or <b><a style={{ color: 'white' }} href="https://channel.deezy.io/" target="_blank">buy a zero-fee channel</a></b>
                   </Card.Title>
                 </Card.Footer>
               </>
