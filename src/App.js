@@ -39,7 +39,6 @@ const DEFAULT_USE_SATS = false
 const INVOICE_EXPIRY_MS = 1000 * 60 * 60 * 12 // 12 hr
 const NODE_ID = "024bfaf0cabe7f874fd33ebf7c6f4e5385971fc504ef3f492432e9e3ec77e1b5cf"
 const CLEARNET_NODE_URI = `${NODE_ID}@52.1.72.207:9735`
-const TOR_NODE_URI = `${NODE_ID}@ecu3omnk6kxer5hw35owlzhw3xuqfroxjnnflbkjkc7xy2jy3gy7b2yd.onion:9735`
 
 function checkIsAccessTokenValid(token) {
   return token && token.match(/[0-9A-Fa-f]{32}/g)
@@ -225,10 +224,7 @@ const App = () => {
   }
 
   function getNodeUri() {
-    return nodeLinkType === "#clearnet" ?
-      CLEARNET_NODE_URI
-      :
-      TOR_NODE_URI
+    return CLEARNET_NODE_URI
   }
 
   function updateSwapParams({ newLightningSwapAmountSats, newFeeOnChainSatsPerByte, newTotalFeeSats, newChainSwapAmountSats, newUseSatsForSwapDisplay }) {
@@ -359,7 +355,7 @@ const App = () => {
           <Card id="swap-section" className="section" fluid bg="dark" text="white" variant="dark">
             <Card.Header style={{ borderBottom: '1px solid gray', marginBottom: '20px' }} className="card-header py-4">
               <Card.Title>
-                <b>swap instantly</b> to get <b>inbound liquidity</b>
+                <b>Swap instantly</b> to get <b>inbound liquidity</b>
               </Card.Title>
             </Card.Header>
             {ready ?
@@ -388,12 +384,12 @@ const App = () => {
                   <Form.Label className="swap-option"><div className="small-text" id="fee-info">{swapParams.totalFeeSats.toLocaleString()} total sat fee ({Math.round(swapParams.feeNetPpm).toLocaleString()} ppm)</div></Form.Label>
                   <br />
 
-                  <Button className="w-50 centered" disabled={!isValidSwapParams()} onClick={initiateSwap}>swap</Button>
+                  <Button className="w-50 centered" disabled={!isValidSwapParams()} onClick={initiateSwap}>Swap</Button>
                 </Card.Body>
                 <br />
                 <Card.Footer className="py-4" style={{ borderTop: '1px solid gray' }}>
                   <Card.Title>
-                    or <b><a style={{ color: 'white' }} href="https://channel.deezy.io/" target="_blank">buy a zero-fee channel</a></b>
+                    or <b><a style={{ color: 'white' }} href="https://channel.deezy.io/" target="_blank">Buy a channel</a></b>
                   </Card.Title>
                 </Card.Footer>
               </>
@@ -408,14 +404,11 @@ const App = () => {
           <Card id="node-section" className="section" bg="dark" text="white">
             <Card.Header style={{ borderBottom: '1px solid gray' }}>
               <Card.Title className="py-3">
-                <b>open a channel</b> with <b>deezy</b>:
+                <b>Open a channel</b> with <b>Deezy</b>:
               </Card.Title>
               <Nav variant="pills" defaultActiveKey={nodeLinkType} onSelect={(s) => setNodeLinkType(s)}>
                 <Nav.Item>
                   <Nav.Link eventKey="#clearnet">Clearnet</Nav.Link>
-                </Nav.Item>
-                <Nav.Item>
-                  <Nav.Link eventKey="#tor">Tor</Nav.Link>
                 </Nav.Item>
               </Nav>
             </Card.Header>
