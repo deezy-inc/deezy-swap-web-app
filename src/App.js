@@ -461,7 +461,7 @@ const App = () => {
                   autoFocus
                 />
               </InputGroup>
-              <div className="small-text">get a token by emailing support@deezy.io or contacting @dannydeezy on telegram.</div><br />
+              <div className="small-text">get a token by emailing support@deezy.io</div><br />
               <div className="small-text"></div>
             </Modal.Body>
             <Modal.Footer>
