@@ -35,6 +35,7 @@ const DEFAULT_VBYTES_PER_SWAP = 300
 const SATS_PER_BTC = 100000000
 const DEFAULT_CHAIN_SWAP_SATS = 25000000
 const MIN_SWAP_FEE_RATE = 8
+const MAX_SWAP_FEE_RATE = 2000
 const DEFAULT_ON_CHAIN_FEE_RATE_SATS_PER_VBYTE = 40
 const DEFAULT_USE_SATS = false
 const INVOICE_EXPIRY_MS = 1000 * 60 * 60 * 12 // 12 hr
@@ -381,7 +382,7 @@ const App = () => {
                     </Form.Control.Feedback>
                   </InputGroup>
                   <Form.Label className="swap-option"><div className="small-text" id="fee-info">{swapParams.feeOnChainSatsPerVbyte} sat/vbyte on-chain fee rate</div></Form.Label>
-                  <Form.Range className="swap-option" min={MIN_SWAP_FEE_RATE} defaultValue={DEFAULT_ON_CHAIN_FEE_RATE_SATS_PER_VBYTE} onChange={handleFeeRateChange} />
+                  <Form.Range className="swap-option" min={MIN_SWAP_FEE_RATE} defaultValue={DEFAULT_ON_CHAIN_FEE_RATE_SATS_PER_VBYTE} max={MAX_SWAP_FEE_RATE} onChange={handleFeeRateChange} />
                   <Form.Label className="swap-option"><div className="small-text" id="fee-info">{swapParams.totalFeeSats.toLocaleString()} total sat fee ({Math.round(swapParams.feeNetPpm).toLocaleString()} ppm)</div></Form.Label>
                   <br />
 
